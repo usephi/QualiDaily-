@@ -35,7 +35,6 @@ jobs:
         run: |
           cd android
           chmod +x gradlew
-          # هذا الأمر يخبر أندرويد بحل مشكلة تكرار المكتبات تلقائياً
           ./gradlew assembleDebug -Pandroid.useAndroidX=true -Pandroid.enableJetifier=true
           
       - name: Upload APK
