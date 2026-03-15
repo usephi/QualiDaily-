@@ -31,11 +31,18 @@ jobs:
           distribution: 'temurin'
           java-version: '21'
 
+      - name: Fix Android Environment
+        run: |
+          cd android
+          echo "android.useAndroidX=true" >> gradle.properties
+          echo "android.enableJetifier=true" >> gradle.properties
+          sed -i 's/targetSdkVersion = 34/targetSdkVersion = 34\n        multiDexEnabled true/' app/build.gradle
+
       - name: Build APK
         run: |
           cd android
           chmod +x gradlew
-          ./gradlew assembleDebug -Pandroid.useAndroidX=true -Pandroid.enableJetifier=true
+          ./gradlew assembleDebug
           
       - name: Upload APK
         uses: actions/upload-artifact@v4
