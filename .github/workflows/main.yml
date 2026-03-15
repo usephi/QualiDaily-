@@ -21,7 +21,8 @@ jobs:
       - name: Setup Capacitor
         run: |
           npm install @capacitor/core @capacitor/cli @capacitor/android
-          npx cap init "QualiDaily" "com.qualidaily.app" --web-dir dist --confirm
+          # تم حذف --confirm لأنها تسبب الخطأ
+          npx cap init "QualiDaily" "com.qualidaily.app" --web-dir dist
           npx cap add android
           npx cap copy
 
