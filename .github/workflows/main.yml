@@ -18,31 +18,25 @@ jobs:
       - name: Build Web App
         run: npm run build
 
-      - name: Setup Capacitor
-        run: |
-          npm install @capacitor/core @capacitor/cli @capacitor/android
-          npx cap init "QualiDaily" "com.qualidaily.app" --web-dir dist
-          npx cap add android
-          npx cap copy
-
       - name: Setup Java
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
-          java-version: '21'
+          java-version: '17'
 
-      - name: Fix Android Environment
+      - name: Setup Capacitor and Force Clean Android
         run: |
-          cd android
-          echo "android.useAndroidX=true" >> gradle.properties
-          echo "android.enableJetifier=true" >> gradle.properties
-          sed -i 's/targetSdkVersion = 34/targetSdkVersion = 34\n        multiDexEnabled true/' app/build.gradle
-
+          npm install @capacitor/core @capacitor/cli @capacitor/android
+          rm -rf android
+          npx cap init "QualiDaily" "com.qualidaily.app" --web-dir dist
+          npx cap add android
+          npx cap copy
+          
       - name: Build APK
         run: |
           cd android
           chmod +x gradlew
-          ./gradlew assembleDebug
+          ./gradlew assembleDebug -Pandroid.useAndroidX=true -Pandroid.enableJetifier=true
           
       - name: Upload APK
         uses: actions/upload-artifact@v4
